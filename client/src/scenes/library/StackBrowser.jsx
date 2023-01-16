@@ -1,9 +1,9 @@
-//Contentedible Branch
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
+import ContentEditable from 'react-contenteditable'
 import useFetch from "../../useFetch";
 
 const Stack = ({ title, link, color, cards, cardsRight, cardsFalse }) => {
