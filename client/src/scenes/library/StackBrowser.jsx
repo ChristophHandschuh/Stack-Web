@@ -1,23 +1,31 @@
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+//Main Branch
+import { Box, Typography, useTheme } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { tokens } from "../../theme";
-import ContentEditable from 'react-contenteditable'
-import useFetch from "../../useFetch";
+import { useStoreActions, useStoreState } from "easy-peasy";
+import ContentEditable from 'react-contenteditable';
 
-const Stack = ({ title, link, color, cards, cardsRight, cardsFalse }) => {
+const Stack = ({ title, id, color, cards, cardsRight, cardsFalse }) => {
     let greenPercent = 100 - parseInt(cardsRight/cards * 100);
     let redPercent = parseInt(cardsFalse/cards * 100);
 
+    const changeStackName = useStoreActions(actions => actions.changeStackName);
+
+    let navigate = useNavigate(); 
+    const routeChange = () =>{ 
+      let path = `/library/${id}`;
+      navigate(path);
+    }
+
     return(
-        <Link to={`/library/${link}`} style={{textDecoration: 'none'}}>
             <Box
                 borderRadius="0.6rem"
                 marginX="1.5rem"
                 mb="2rem"
                 pb="0.75rem"
                 sx={{ boxShadow: 4 }}
+                onClick={routeChange}
             >
                 <Box
                     backgroundColor={ color }
@@ -26,12 +34,12 @@ const Stack = ({ title, link, color, cards, cardsRight, cardsFalse }) => {
                     >
                 </Box>
                 <Box mt="0.75rem" mx="1rem">
-                    <Box>
+                    <Box width="10rem">
                         <Typography
                             variant="h5"
                             fontWeight="600"
                             color="#000000"
-                        >{ title }</Typography>
+                        ><ContentEditable html={title} onChange={(e) => changeStackName({name: e.target.value, id:id})}/></Typography>
                         <Typography
                             variant="h6"
                             fontWeight="625"
@@ -50,22 +58,24 @@ const Stack = ({ title, link, color, cards, cardsRight, cardsFalse }) => {
                     </Box>
                 </Box>
             </Box>
-        </Link>
     );
 }
 
 const StackBrowser = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-
+    const stacks = useStoreState((state) => state.stacks);
 
     return (
         <Box height="100vh" borderRight="0.06rem solid #adadad">
             <Box textAlign="center" py="1.75rem">
                 <Typography variant="h2" fontSize="1.1rem" fontWeight="600" color={colors.grey[100]}>Card Browser</Typography>
             </Box>
-            <Stack title="NW 1.Test" color="#EE8989" cards="26" cardsRight="10" cardsFalse="2" link="1"/>
-            <Stack title="DIC 1.Test" color="#89C4EE" cards="10" cardsRight="5" cardsFalse="2" link="1"/>
+
+            {stacks.map((stack, i) => (
+                <Stack key={i} title={stack.name} color={stack.color} cards={stack.flashcards.length} cardsRight={stack.cardsRight} cardsFalse={stack.cardsFalse} id={i + 1}/>
+            ))}
+
             <Box marginX="1.5rem" sx={{ boxShadow: 4 }} height="2.75rem" borderRadius="0.6rem" display="flex" justifyContent="center" alignItems="center">
                 <Box display="flex" alignItems="center">
                     <AddCircleOutlineIcon sx={{ color:"#909090"}}/>

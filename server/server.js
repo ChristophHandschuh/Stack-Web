@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const userModel = require("./db/user");
+const stackModel = require("./db/stack");
 
 const app = express();
 
@@ -54,10 +55,9 @@ app.post("/register", (req, res) => {
     res.send("asf");
 });
 
-
 app.get("/login", (req, res) => {
     if (req.session.user) {
-        res.send({ loggedIn: true, user: req.session.user });
+        res.send({ loggedIn: true });  //id: req.session.user[0]._id, username: req.session.user[0].username
     } else {
         res.send({ loggedIn: false });
     }
@@ -84,6 +84,39 @@ app.post("/login", (req, res) => {
             }
         }
     });
+});
+
+app.get("/stacks", (req, res) => {
+
+    if(req.session.hasOwnProperty("user")){
+        const id = req.session.user[0]._id;
+        stackModel.find({ userID:id }, function (err, results) {
+            if(err){
+                console.log(err);
+                res.send(err);
+            }else{
+                res.send({ results: results });
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
+
+});
+
+app.post("/stackname", (req, res) => {
+    if(req.session.hasOwnProperty("user")){ //Not secure!! :()
+        stackModel.findByIdAndUpdate({ _id:req.body._id },{name:req.body.name}, function (err, results) {
+            if(err){
+                console.log(err);
+                res.send({status: true}, err);
+            }else{
+                res.send({status: false});
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
 });
 
 app.listen(3001, () => {

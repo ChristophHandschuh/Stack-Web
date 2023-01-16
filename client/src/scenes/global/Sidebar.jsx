@@ -41,7 +41,7 @@ const Sidebar = () => {
                         <HomeOutlinedIcon sx={{ color: "#827b7b" }} fontSize="large"/>
                     </Box>
                 </Link>
-                <Link to="/library">
+                <Link to="/library/1">
                     <Box width="3rem" height="3rem" display="flex" alignItems="center" justifyContent="center" borderRadius="0.5rem" sx={{ '&:hover': {background: "#ECECEC"}}} my="1rem">
                         <LocalLibraryOutlinedIcon sx={{ color: "#827b7b" }} fontSize="large"/>
                     </Box>
