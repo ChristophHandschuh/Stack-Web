@@ -1,4 +1,4 @@
-import { ColorModeContext, useMode} from './theme';
+import { ColorModeContext, useMode } from './theme';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Learn from "./scenes/learn";
 import Sidebar from './scenes/global/Sidebar';
@@ -6,9 +6,11 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import Home from './scenes/home';
 import Library from './scenes/library';
 import SignIn from './scenes/login';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from "axios";
 import { Box } from '@mui/system';
+import { StoreProvider } from 'easy-peasy';
+import store from './Store';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -17,6 +19,7 @@ function App() {
   useEffect(() => {
     async function checkLoginStatus() {
       const response = await axios.get("http://localhost:3001/login");
+      console.log(response);
       setIsLoggedIn(response.data.loggedIn);
     }
     checkLoginStatus();
@@ -26,6 +29,7 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
     <CssBaseline />
+    <StoreProvider store={store}>
       <div className="app">
         <Router>
         {isLoggedIn && <Sidebar />}
@@ -38,6 +42,7 @@ function App() {
           </main>
         </Router>
       </div>
+      </StoreProvider>
     </ThemeProvider>
     </ColorModeContext.Provider>
   );
