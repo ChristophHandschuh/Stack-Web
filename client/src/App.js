@@ -6,6 +6,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import Home from './scenes/home';
 import Library from './scenes/library';
 import SignIn from './scenes/login';
+import Create from './scenes/create';
 import React, { useEffect, useState, useMemo } from 'react';
 import axios from "axios";
 import { Box } from '@mui/system';
@@ -36,8 +37,9 @@ function App() {
           <main className="content">
               <Routes>
                   <Route exact path="/" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Home/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
-                  <Route path="/library" element={ <Library /> } />
-                  <Route path="/library/:id" element={ <Library /> } />
+                  <Route path="/library" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
+                  <Route path="/library/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
+                  <Route path="/create/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
               </Routes>
           </main>
         </Router>

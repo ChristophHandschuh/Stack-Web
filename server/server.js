@@ -90,7 +90,7 @@ app.get("/stacks", (req, res) => {
 
     if(req.session.hasOwnProperty("user")){
         const id = req.session.user[0]._id;
-        stackModel.find({ userID:id }, function (err, results) {
+        stackModel.find({ userID:id }).sort({"createdAt": -1}).exec((err, results) => {
             if(err){
                 console.log(err);
                 res.send(err);
@@ -109,15 +109,40 @@ app.post("/stackname", (req, res) => {
         stackModel.findByIdAndUpdate({ _id:req.body._id },{name:req.body.name}, function (err, results) {
             if(err){
                 console.log(err);
-                res.send({status: true}, err);
+                res.send({status: false}, err);
             }else{
-                res.send({status: false});
+                res.send({status: true});
             }
         });
     }else{
         res.send("Please login first!");
     }
 });
+
+app.get("/newstack", (req, res) => {
+    const id = req.session.user[0]._id;
+    if(req.session.hasOwnProperty("user")){ //Not secure!! :()
+        const stack = new stackModel({ name: "New Stack", userID:id });
+        stack.save();
+        res.send(stack);
+    }
+});
+
+app.post("/flashcardcontent", (req, res) => {
+    if(req.session.hasOwnProperty("user")){ //Not secure!! :()
+        stackModel.findByIdAndUpdate(req.body._id, { $set: {[`flashcards.${req.body.flashcard_id}`]:req.body.flashcard}}, function (err, result) {
+            if(err){
+                console.log(err);
+                res.send({status: false}, err);
+            }else{
+                res.send({status: true});
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
+});
+
 
 app.listen(3001, () => {
     console.log("Server running!");

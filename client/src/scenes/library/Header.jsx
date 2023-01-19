@@ -19,7 +19,7 @@ const Header = () => {
             >
                 <Box display="flex" alignItems="center">
                     <Box backgroundColor={ color } height="1rem" width="1rem" borderRadius="1rem" ml="1.75rem" mr="0.8rem"></Box>
-                    <Typography variant="h4" fontWeight="600" color="#000">{ title }</Typography>
+                    <Typography variant="h4" fontWeight="600" color="#000">{ title.replace("<br>", '') }</Typography>
                 </Box>
                 <Box display="flex" alignItems="center">
                     <Typography

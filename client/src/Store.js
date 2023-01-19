@@ -21,11 +21,29 @@ const store = createStore({
   }),
   changeStackName: action((state, payload) => {
     let stack = state.stacks[payload.id-1];
-    stack.name = payload.name.replace("<br>", '');
+    stack.name = payload.name;
     axios.post("http://localhost:3001/stackname", {_id: stack._id, name:stack.name});
+  }),
+  changeCardContent: action((state, payload) => {
+    let card = state.stacks[payload.stack_id-1].flashcards[payload.card_id];
+    if(payload.front){
+      card.front = payload.front;
+    }else{
+      card.back = payload.back;
+    }
+    axios.post("http://localhost:3001/flashcardcontent", {_id: state.stacks[payload.stack_id-1]._id, flashcard_id:payload.card_id ,flashcard:card});
+  }),
+  newStack: thunk(async (actions, payload) => {
+    const response = await axios.get("http://localhost:3001/newstack");
+    const stack = response.data;
+    actions.addData(stack);
+    console.log(stack);
   }),
   setData: action((state, payload) => {
     state.stacks = payload;
+  }),
+  addData: action((state, payload) => {
+    state.stacks.unshift(payload);
   }),
   setLoading: action((state, payload) => {
     state.loading = payload;
