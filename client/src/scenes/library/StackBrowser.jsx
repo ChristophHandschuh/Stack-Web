@@ -1,12 +1,11 @@
 //Main Branch
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useNavigate } from "react-router-dom";
-import { tokens } from "../../theme";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import ContentEditable from 'react-contenteditable';
 
-const Stack = ({ title, id, color, cards, cardsRight, cardsFalse }) => {
+const Stack = ({ title, id, color, cardsLearned, cardsLearning, cardsNew }) => {
     const changeStackName = useStoreActions(actions => actions.changeStackName);
 
     let navigate = useNavigate(); 
@@ -15,9 +14,10 @@ const Stack = ({ title, id, color, cards, cardsRight, cardsFalse }) => {
       navigate(path);
     }
 
-    if(cards > 0){
-        let greenPercent = 100 - parseInt(cardsRight/cards * 100);
-        let redPercent = parseInt(cardsFalse/cards * 100);
+    let sum = cardsNew + cardsLearned + cardsLearning;
+    if(cardsLearned != 0 || cardsLearning != 0 || cardsNew != 0){
+        let greenPercent = 100 - parseInt(cardsLearned/sum * 100);
+        let redPercent = parseInt(cardsNew/sum * 100);
 
         return(
             <Box
@@ -46,7 +46,7 @@ const Stack = ({ title, id, color, cards, cardsRight, cardsFalse }) => {
                             fontWeight="625"
                             color="#909090"
                             mt="-5px"
-                        >{ cards } Cards</Typography>
+                        >{ sum } Cards</Typography>
                     </Box>
                    <Box
                         mt="1rem"
@@ -88,7 +88,7 @@ const Stack = ({ title, id, color, cards, cardsRight, cardsFalse }) => {
                             fontWeight="625"
                             color="#909090"
                             mt="-5px"
-                        >{ cards } Cards</Typography>
+                        >{ sum } Cards</Typography>
                     </Box>
                 </Box>
             </Box>
@@ -97,15 +97,14 @@ const Stack = ({ title, id, color, cards, cardsRight, cardsFalse }) => {
 }
 
 const StackBrowser = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
     const stacks = useStoreState((state) => state.stacks);
     const newStack = useStoreActions(actions => actions.newStack);
 
+    console.log(stacks);
     return (
         <Box height="100vh" borderRight="0.06rem solid #adadad">
             <Box height="4.5rem" py="0.5rem" display="flex" alignItems="center" justifyContent="center" borderBottom="0.06rem solid #adadad">   {/* height="4.5rem" */}
-                <Typography variant="h2" fontSize="1.1rem" fontWeight="600" color={colors.grey[100]}>Card Browser</Typography>
+                <Typography variant="h2" fontSize="1.1rem" fontWeight="600" color="black">Card Browser</Typography>
             </Box>
 
             <Box onClick={newStack} mx="1.5rem" my="1.5rem" sx={{ boxShadow: 4 }} height="3rem" borderRadius="0.6rem" display="flex" justifyContent="center" alignItems="center">   {/* mx="1.5rem" */}
@@ -114,9 +113,8 @@ const StackBrowser = () => {
                     <Typography variant="h5" fontWeight="625" color="#909090" ml="0.5rem">Add new Stack</Typography>
                 </Box>
             </Box>
-
             {stacks && stacks.map((stack, i) => (
-                <Stack key={i} title={stack.name} color={stack.color} cards={stack.flashcards.length} cardsRight={stack.cardsRight} cardsFalse={stack.cardsFalse} id={i + 1}/>
+                <Stack key={i} title={stack.name} color={stack.color} cardsLearned={stack.cardsLearned} cardsLearning={stack.cardsLearning} cardsNew={stack.cardsNew} id={i + 1}/>
             ))}
         </Box>
     );

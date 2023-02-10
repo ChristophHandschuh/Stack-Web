@@ -7,7 +7,7 @@ const Header = () => {
     const stacks = useStoreState((state) => state.stacks);
     const title = stacks[id-1].name;
     const color = stacks[id-1].color;
-    const cards = stacks[id-1].flashcards.length;
+    const cards = stacks[id-1].cards.length;
 
     return (
         <Box>

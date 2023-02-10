@@ -9,26 +9,30 @@ const stackSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    flashcards: {
-        type: Object,
-        default: []
-    },
     color: {
         type: String,
         default: "#EE8989",
     },
-    cardsFalse: {
-        type: Number,
-        default: 0
-    },
-    cardsRight: {
-        type: Number,
-        default: 0
+    cards: {
+        type: Object,
+        default: []
     },
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    cardsNew: {
+        type: Number,
+        default: 0,
+    },
+    cardsLearning: {
+        type: Number,
+        default: 0,
+    },
+    cardsLearned: {
+        type: Number,
+        default: 0,
+    },
 },{
     versionKey: false
 });

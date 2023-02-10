@@ -1,6 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { tokens } from "../../theme";
+import { MenuItem } from "react-pro-sidebar";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
@@ -11,11 +10,11 @@ import FilterNoneIcon from '@mui/icons-material/FilterNone';
 
 const Item = ({ title, icon, to }) => {
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+
     return(
         <Box textAlign="center" my="25px">
             <MenuItem
-                style={{ color: colors.grey[100] }} 
+                style={{ color: "grey" }} 
                 icon={ icon }
             >
                 <Link to={to}/>
@@ -27,11 +26,8 @@ const Item = ({ title, icon, to }) => {
 
 
 const Sidebar = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-
     return (
-        <Box height="100vh" width="6rem" borderRight="0.06rem solid #adadad" display="flex" flexDirection="column" justifyContent="space-between" alignItems="center" pb="1rem" pt="1.5rem">
+        <Box height="100vh" width="6rem" borderRight="0.06rem solid" borderRightColor="primary.main" display="flex" flexDirection="column" justifyContent="space-between" alignItems="center" pb="1rem" pt="1.5rem">
             <Box>
                 <FilterNoneIcon sx={{ color: "#827b7b" }} fontSize="large"/>
             </Box>

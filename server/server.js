@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const userModel = require("./db/user");
 const stackModel = require("./db/stack");
+const cardModel = require("./db/card");
 
 const app = express();
 
@@ -87,14 +88,21 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/stacks", (req, res) => {
-
     if(req.session.hasOwnProperty("user")){
         const id = req.session.user[0]._id;
-        stackModel.find({ userID:id }).sort({"createdAt": -1}).exec((err, results) => {
+        stackModel.find({ userID:id }).sort({"createdAt": -1}).exec( async (err, results) => {
             if(err){
                 console.log(err);
                 res.send(err);
             }else{
+                for(let i = 0; i < results.length; i++)
+                {
+                    for(let j = 0; j < results[i].cards.length; j++)
+                    {
+                        const result = await cardModel.find({ _id: results[i].cards[j].card_id });
+                        results[i].cards[j] = result[0];
+                    }
+                }
                 res.send({ results: results });
             }
         });
@@ -128,20 +136,46 @@ app.get("/newstack", (req, res) => {
     }
 });
 
-app.post("/flashcardcontent", (req, res) => {
+app.post("/newcard", (req, res) => {
+    const id = req.session.user[0]._id;
+    let reqb = req.body;
+    console.log("new card");
     if(req.session.hasOwnProperty("user")){ //Not secure!! :()
-        stackModel.findByIdAndUpdate(req.body._id, { $set: {[`flashcards.${req.body.flashcard_id}`]:req.body.flashcard}}, function (err, result) {
-            if(err){
-                console.log(err);
-                res.send({status: false}, err);
-            }else{
-                res.send({status: true});
-            }
-        });
-    }else{
-        res.send("Please login first!");
+        console.log(reqb.type);
+        if(reqb.type === "normal"){
+            const card = new cardModel({ type: reqb.type, front: reqb.front, back: reqb.back });
+            card.save().then(doc => {
+                stackModel.findByIdAndUpdate({ _id:reqb._id },{ $push: {cards: {card_id: card._id.toString(), status:"learning", ease_factor: 250, interval: 0}}, $inc:{ cardsNew: 1 }}, function (err, results) {
+                    if(err){
+                        // res.send({status: false}, err);
+                        res.send(err);
+                    }else{
+                        res.send("success");
+                        // res.send({status: true});
+                    }
+                });
+            }).catch(error => {
+                res.send("error");
+            });
+        }
     }
 });
+
+
+// app.post("/flashcardcontent", (req, res) => {
+//     if(req.session.hasOwnProperty("user")){ //Not secure!! :()
+//         stackModel.findByIdAndUpdate(req.body._id, { $set: {[`flashcards.${req.body.flashcard_id}`]:req.body.flashcard}}, function (err, result) {
+//             if(err){
+//                 console.log(err);
+//                 res.send({status: false}, err);
+//             }else{
+//                 res.send({status: true});
+//             }
+//         });
+//     }else{
+//         res.send("Please login first!");
+//     }
+// });
 
 
 app.listen(3001, () => {

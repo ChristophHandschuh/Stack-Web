@@ -3,11 +3,9 @@ import { action, createStore, thunk } from "easy-peasy";
 
 const store = createStore({
   stacks: [],
+  cards: [],
   loading: false,
   error: null,
-  addFlashcard: action((state, stack_id, type, front, back) => {
-    state.stacks[stack_id].flashcards.push({type: type, front: front, back: back});
-  }),
   getStacks: thunk(async (actions, payload) => {
     actions.setLoading(true);
     try {
@@ -36,13 +34,21 @@ const store = createStore({
   newStack: thunk(async (actions, payload) => {
     const response = await axios.get("http://localhost:3001/newstack");
     const stack = response.data;
-    actions.addData(stack);
-    console.log(stack);
+    actions.addStack(stack);
+  }),
+  newCard: action((state, payload) => {
+    console.log(payload.CardData);
+    async function req(){
+      const response = await axios.post("http://localhost:3001/newcard", {_id: state.stacks[payload.id-1]._id, type: payload.CardData.type, front: payload.CardData.front, back: payload.CardData.back});
+      const card = response.data;
+      console.log(card);
+    }
+    req();
   }),
   setData: action((state, payload) => {
     state.stacks = payload;
   }),
-  addData: action((state, payload) => {
+  addStack: action((state, payload) => {
     state.stacks.unshift(payload);
   }),
   setLoading: action((state, payload) => {

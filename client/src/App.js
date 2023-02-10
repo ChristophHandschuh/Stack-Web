@@ -1,4 +1,3 @@
-import { ColorModeContext, useMode } from './theme';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Learn from "./scenes/learn";
 import Sidebar from './scenes/global/Sidebar';
@@ -12,9 +11,10 @@ import axios from "axios";
 import { Box } from '@mui/system';
 import { StoreProvider } from 'easy-peasy';
 import store from './Store';
+import { useTheme } from "@emotion/react";
+import theme from "./theme";
 
 function App() {
-  const [theme, colorMode] = useMode();
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   useEffect(() => {
@@ -27,7 +27,6 @@ function App() {
   }, []);
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
     <CssBaseline />
     <StoreProvider store={store}>
@@ -40,13 +39,13 @@ function App() {
                   <Route path="/library" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
                   <Route path="/library/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
                   <Route path="/create/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
+                  <Route path="/learn/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Learn/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
               </Routes>
           </main>
         </Router>
       </div>
       </StoreProvider>
     </ThemeProvider>
-    </ColorModeContext.Provider>
   );
 }
 
