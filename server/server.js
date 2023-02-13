@@ -90,21 +90,42 @@ app.post("/login", (req, res) => {
 app.get("/stacks", (req, res) => {
     if(req.session.hasOwnProperty("user")){
         const id = req.session.user[0]._id;
-        stackModel.find({ userID:id }).sort({"createdAt": -1}).exec( async (err, results) => {
+        stackModel.find({ userID:id }).sort({"createdAt": -1}).exec((err, results) => {
             if(err){
                 console.log(err);
                 res.send(err);
             }else{
-                console.log(result);
-                for(let i = 0; i < results.length; i++)
-                {
-                    for(let j = 0; j < results[i].cards.length; j++)
-                    {
-                        const result = await cardModel.find({ _id: results[i].cards[j].card_id });
-                        results[i].cards[j] = result[0];
-                    }
-                }
+                // for(let i = 0; i < results.length; i++)
+                // {
+                //     for(let j = 0; j < results[i].cards.length; j++)
+                //     {
+                //         const result = await cardModel.find({ _id: results[i].cards[j].card_id });
+                //         results[i].cards[j] = result[0];
+                //     }
+                // }
                 res.send({ results: results });
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
+
+});
+
+app.get("/cards", (req, res) => {
+    if(req.session.hasOwnProperty("user")){
+        stackModel.find({ _id:req.query._id }).exec( async (err, result) => {
+            if(err){
+                console.log(err);
+                res.send(err);
+            }else{
+                let response = [];
+                for(let i = 0; i < result[0].cards.length; i++)
+                {
+                    const card = await cardModel.find({ _id: result[0].cards[i].card_id });
+                    response.push(card[0]);
+                }
+                res.send(response);
             }
         });
     }else{

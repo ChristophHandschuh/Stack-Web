@@ -10,8 +10,17 @@ const store = createStore({
     actions.setLoading(true);
     try {
       const response = await axios.get("http://localhost:3001/stacks");
-      actions.setData(response.data.results);
-      console.log(response.data.results);
+      actions.setStacks(response.data.results);
+    } catch (e) {
+      actions.setError(e);
+    }
+    actions.setLoading(false);
+  }),
+  getCards: thunk(async (actions, payload) => {
+    actions.setLoading(true);
+    try {
+      const response = await axios.get("http://localhost:3001/cards", {params: {_id: payload._id}});
+      actions.setCards(response.data);
     } catch (e) {
       actions.setError(e);
     }
@@ -45,8 +54,11 @@ const store = createStore({
     }
     req();
   }),
-  setData: action((state, payload) => {
+  setStacks: action((state, payload) => {
     state.stacks = payload;
+  }),
+  setCards: action((state, payload) => {
+    state.cards = payload;
   }),
   addStack: action((state, payload) => {
     state.stacks.unshift(payload);
