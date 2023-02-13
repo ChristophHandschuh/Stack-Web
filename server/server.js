@@ -95,6 +95,7 @@ app.get("/stacks", (req, res) => {
                 console.log(err);
                 res.send(err);
             }else{
+                console.log(result);
                 for(let i = 0; i < results.length; i++)
                 {
                     for(let j = 0; j < results[i].cards.length; j++)
