@@ -6,15 +6,19 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import { useEffect } from "react";
 
+const cleanText = (text) => {
+    text = text.replaceAll("<div>", "").replaceAll("</div>", " ").replaceAll("<br>", "");
+    text = text.slice(0, 23);
+    console.log(text);
+    return (text);
+}
+
+
 const StackInspektor = () => {
     const { id } = useParams();
     const stacks = useStoreState((state) => state.stacks);
     const cards = useStoreState((state) => state.cards);
     const getCards = useStoreActions(actions => actions.getCards);
-
-    const changeCardContent = useStoreActions(actions => actions.changeCardContent);
-    // const cards = stacks[id-1].cards;
-
 
     useEffect(() => {
         getCards({ _id: stacks[id-1]._id});
@@ -46,11 +50,11 @@ const StackInspektor = () => {
                     </Box>
                 </Grid>
                 {cards && cards.map((card, i) => (
-                    <Grid key={i} item xs={6} md={6}>
+                    <Grid key={i} item xs={12} md={6} lg={4}>
                         <Box sx={{ boxShadow: 4 }} borderRadius="0.6rem" mx="1.5rem" my="1.5rem" py="2.5rem" textAlign="center">
-                            <Typography variant="h4" mx="1.2rem" fontWeight="500" color="#000"><ContentEditable html={card.front} disabled={true}/></Typography>
+                            <Typography variant="h4" mx="1.2rem" fontWeight="500" color="#000"><ContentEditable html={cleanText(card.front)} disabled={true}/></Typography>
                             <Box height="0.12rem" my="1.5rem" mx="5rem" backgroundColor="#adadad"></Box>
-                            <Typography variant="h4" mx="1.2rem" fontWeight="500" color="#000"><ContentEditable html={card.back} disabled={true}/></Typography>
+                            <Typography variant="h4" mx="1.2rem" fontWeight="500" color="#000"><ContentEditable html={cleanText(card.back)} disabled={true}/></Typography>
                         </Box>
                     </Grid>
                 ))}
