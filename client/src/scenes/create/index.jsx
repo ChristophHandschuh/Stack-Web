@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import CardBrowser from "./CardBrowser";
+import CardOptions from "./CardOptions";
 import CardCreator from "./CardCreator";
 import Header from "../../components/Header";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 const Create = () => {
     const { stacks, loading, error } = useStoreState(state => state);
     const getStacks = useStoreActions(actions => actions.getStacks);
+    const [CardType, setCardType] = useState("n");
 
     useEffect(() => {
         getStacks();
@@ -19,10 +20,10 @@ const Create = () => {
                 <Grid container>
                     <Grid item xs>
                         {<Header/>}
-                        {<CardCreator/>}
+                        {<CardCreator CardType={CardType}/>}
                     </Grid>
                     <Grid item>
-                        {<CardBrowser/>}
+                        {<CardOptions CardType={CardType} setCardType={setCardType}/>}
                     </Grid>
                 </Grid>
             </Box>

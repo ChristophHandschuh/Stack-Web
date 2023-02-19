@@ -21,6 +21,7 @@ const store = createStore({
     try {
       const response = await axios.get("http://localhost:3001/cards", {params: {_id: payload._id}});
       actions.setCards(response.data);
+      console.log(response.data);
     } catch (e) {
       actions.setError(e);
     }

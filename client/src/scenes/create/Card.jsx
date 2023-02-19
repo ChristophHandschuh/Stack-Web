@@ -1,4 +1,3 @@
-// grid
 import { Box, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import ContentEditable from "react-contenteditable";

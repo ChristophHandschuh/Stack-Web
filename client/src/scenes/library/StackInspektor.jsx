@@ -1,18 +1,71 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useStoreActions, useStoreState } from "easy-peasy";
-import ContentEditable from 'react-contenteditable';
 import { useNavigate, useParams } from "react-router-dom";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import LinkIcon from '@mui/icons-material/Link';
 import { useEffect } from "react";
+import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport, GridToolbarFilterButton } from '@mui/x-data-grid';
 
-const cleanText = (text) => {
-    text = text.replaceAll("<div>", "").replaceAll("</div>", " ").replaceAll("<br>", "");
-    text = text.slice(0, 23);
-    console.log(text);
-    return (text);
+const CustomToolbar = () => {
+    return (
+        <GridToolbarContainer>
+        <GridToolbarFilterButton />
+        <GridToolbarExport />
+        </GridToolbarContainer>
+    );
 }
 
+const cleanText = (cards) => {
+    for(let i = 0; i < cards.length; i++)
+    {
+        cards[i].id = i;
+        cards[i].front = cards[i].front.replaceAll("<br>", "").replaceAll("<span>", "").replaceAll("</span>", "").replaceAll("<em>", "").replaceAll("</em>", "").replaceAll("<div>", "").replaceAll("</div>", " ");
+        cards[i].back = cards[i].back.replaceAll("<br>", "").replaceAll("<span>", "").replaceAll("</span>", "").replaceAll("<em>", "").replaceAll("</em>", "").replaceAll("<div>", "").replaceAll("</div>", " ");
+    }
+    return cards;
+}
+
+const columns: GridColDef[] = [
+    {
+        field: 'id',
+        headerName: 'ID',
+        width: 50,
+        align: "center",
+        headerAlign: "center",
+    },
+    {
+        field: 'front',
+        headerName: 'Question',
+        width: 150,
+        editable: true,
+        flex: 1
+    },
+    {
+        field: 'back',
+        headerName: 'Answer',
+        width: 150,
+        editable: true,
+        flex: 1
+    },
+    {
+        field: 'type',
+        headerName: 'Type',
+        width: 110,
+    },
+    {
+        field: 'edit',
+        headerName: "Edit",
+        width: 50,
+        renderCell: (params) => {
+            return (
+                <Box width="100%" display="flex" alignItems="center" justifyContent="center" style={{ cursor: "pointer" }}>
+                    <LinkIcon index={params.row.id} style={{ fill: "#909090" }}/>
+                </Box>
+            );
+         }
+    }
+  ];
 
 const StackInspektor = () => {
     const { id } = useParams();
@@ -27,6 +80,11 @@ const StackInspektor = () => {
     let navigate = useNavigate(); 
     const routeChange = (route) =>{ 
         let path = `/${route}/${id}`;
+        navigate(path);
+    }
+
+    const cardEdit = (card_id) =>{ 
+        let path = `/create/${id}/${card_id}`;
         navigate(path);
     }
 
@@ -49,15 +107,16 @@ const StackInspektor = () => {
                         </Box>
                     </Box>
                 </Grid>
-                {cards && cards.map((card, i) => (
-                    <Grid key={i} item xs={12} md={6} lg={4}>
-                        <Box sx={{ boxShadow: 4 }} borderRadius="0.6rem" mx="1.5rem" my="1.5rem" py="2.5rem" textAlign="center">
-                            <Typography variant="h4" mx="1.2rem" fontWeight="500" color="#000"><ContentEditable html={cleanText(card.front)} disabled={true}/></Typography>
-                            <Box height="0.12rem" my="1.5rem" mx="5rem" backgroundColor="#adadad"></Box>
-                            <Typography variant="h4" mx="1.2rem" fontWeight="500" color="#000"><ContentEditable html={cleanText(card.back)} disabled={true}/></Typography>
-                        </Box>
-                    </Grid>
-                ))}
+                <Box style={{height: 'calc(100vh - 12rem)'}} width="100%" m="1.5rem">
+                    <DataGrid
+                        rows={cleanText(cards)}
+                        columns={columns}
+                        disableSelectionOnClick
+                        experimentalFeatures={{ newEditingApi: true }}
+                        components={{ Toolbar: CustomToolbar }}
+                        onRowClick={(params) => cardEdit(params.id)}
+                    />
+                </Box>
             </Grid>
         </Box>
     );

@@ -39,6 +39,7 @@ function App() {
                   <Route path="/library" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
                   <Route path="/library/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
                   <Route path="/create/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
+                  <Route path="/create/:id/:card_id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
                   <Route path="/learn/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Learn/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
               </Routes>
           </main>
