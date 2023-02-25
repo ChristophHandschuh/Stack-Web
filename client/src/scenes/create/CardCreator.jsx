@@ -10,14 +10,13 @@ import CardFinishButton from "./Buttons/CardFinishButton";
 
 const CardCreator = (props) => {
     const [CardSide, setCardSide] = useState(true);
-    const [CardData, setCardData] = useState({type: "normal", front: "Enter your knowledge...", back: "Enter your knowledge..."});
-
+    
     return (
         <Box display="flex" flexDirection="column" style={{height: "calc(100vh - 4.5rem)"}}>
             <CardSideButton CardSide={CardSide} setCardSide={setCardSide}/>
-            <Card CardSide={CardSide} CardType={props.CardType} setCardData={setCardData}/>
+            <Card CardSide={CardSide} CardData={props.CardData} setCardData={props.setCardData}/>
             {/* <CardTypeButton CardType={CardType} setCardType={setCardType}/> */}
-            <CardFinishButton CardData={CardData} setCardData={setCardData}/>
+            <CardFinishButton CardData={props.CardData} setCardData={props.setCardData}/>
         </Box>
     )
 }

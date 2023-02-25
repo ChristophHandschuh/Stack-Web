@@ -134,6 +134,44 @@ app.get("/cards", (req, res) => {
 
 });
 
+//route "/cardData" is used to get the data of a card by its id
+app.get("/cardData", (req, res) => {
+    if(req.session.hasOwnProperty("user")){
+        cardModel.find({ _id:req.query._id }).exec((err, result) => {
+            if(err){
+                console.log(err);
+                res.send(err);
+            }else{
+                res.send(result[0]);
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
+});
+
+//route "/editcard" is a post route, which gets the content of the card and edits its database entry
+app.post("/editcard", (req, res) => {
+    if(req.session.hasOwnProperty("user")){ //Not secure!! :()
+            console.log(req.body.payload);
+            error = false;
+            for (const [key, value] of Object.entries(req.body.payload)) {
+                console.log(`${key}: ${value}`);
+                cardModel.findByIdAndUpdate(req.body.payload._id, { key: value}).exec((err, result) => {
+                    if(err){
+                        console.log(err);
+                        res.send(err);
+                    }else{
+                        console.log(result);
+                    }
+                });
+            }
+            res.status(200);
+    }else{
+        res.send("Please login first!");
+    }
+});
+
 app.post("/stackname", (req, res) => {
     if(req.session.hasOwnProperty("user")){ //Not secure!! :()
         stackModel.findByIdAndUpdate({ _id:req.body._id },{name:req.body.name}, function (err, results) {

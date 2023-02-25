@@ -21,7 +21,6 @@ const store = createStore({
     try {
       const response = await axios.get("http://localhost:3001/cards", {params: {_id: payload._id}});
       actions.setCards(response.data);
-      console.log(response.data);
     } catch (e) {
       actions.setError(e);
     }
@@ -50,6 +49,15 @@ const store = createStore({
     console.log(payload.CardData);
     async function req(){
       const response = await axios.post("http://localhost:3001/newcard", {_id: state.stacks[payload.id-1]._id, type: payload.CardData.type, front: payload.CardData.front, back: payload.CardData.back});
+      const card = response.data;
+      console.log(card);
+    }
+    req();
+  }),
+  editCard: action((state, payload) => {
+    console.log(payload.CardData);
+    async function req(){
+      const response = await axios.post("http://localhost:3001/editcard", {payload: payload.CardData});
       const card = response.data;
       console.log(card);
     }

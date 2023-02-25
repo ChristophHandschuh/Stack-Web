@@ -8,7 +8,6 @@ const StackBrowser = () => {
     const stacks = useStoreState((state) => state.stacks);
     const newStack = useStoreActions(actions => actions.newStack);
 
-    console.log(stacks);
     return (
         <Box height="100vh" borderRight="0.06rem solid #adadad">
             <Box height="4.5rem" py="0.5rem" display="flex" alignItems="center" justifyContent="center" borderBottom="0.06rem solid #adadad">   {/* height="4.5rem" */}

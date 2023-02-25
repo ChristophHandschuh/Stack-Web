@@ -18,11 +18,11 @@ const CardOptions = (props) => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={props.CardType}
+                            value={props.CardData["type"]}
                             onChange={(params) =>  props.setCardType(params.target.value)}
                         >
-                            <MenuItem value={"n"}>Normal</MenuItem>
-                            <MenuItem value={"m"}>Multiple Choice</MenuItem>
+                            <MenuItem value={"normal"}>Normal</MenuItem>
+                            <MenuItem value={"multiple_choice"}>Multiple Choice</MenuItem>
                         </Select>
                         </FormControl>
                     </Box>
