@@ -153,16 +153,18 @@ app.get("/cardData", (req, res) => {
 //route "/editcard" is a post route, which gets the content of the card and edits its database entry
 app.post("/editcard", (req, res) => {
     if(req.session.hasOwnProperty("user")){ //Not secure!! :()
-            console.log(req.body.payload);
-            error = false;
-            for (const [key, value] of Object.entries(req.body.payload)) {
-                console.log(`${key}: ${value}`);
-                cardModel.findByIdAndUpdate(req.body.payload._id, { key: value}).exec((err, result) => {
+            var obj_arr = [];
+            var obj = {};
+            Object.keys(req.body.payload).forEach(key => {
+                obj = {};
+                obj[key] = req.body.payload[key];
+                obj_arr.push(obj);
+            });
+            for(let i = 1; i< obj_arr.length; i++){
+                cardModel.findByIdAndUpdate(req.body.payload._id, obj_arr[i]).exec((err, result) => {
                     if(err){
                         console.log(err);
                         res.send(err);
-                    }else{
-                        console.log(result);
                     }
                 });
             }

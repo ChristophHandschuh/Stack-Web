@@ -25,11 +25,11 @@ const Card = (props) => {
         const changeCardNormalText = (text) => {
             if(props.CardSide){
                 props.CardData.front = text;
+                console.log(props.CardData.front);
             }else{
                 props.CardData.back = text;
             }
-            setCardNormalText(text);
-            props.setCardData(CardData);
+            // props.setCardData(CardData);
         }
 
         return (

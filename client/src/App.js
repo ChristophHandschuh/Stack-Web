@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Learn from "./scenes/learn";
 import Sidebar from './scenes/global/Sidebar';
 import { CssBaseline, ThemeProvider } from "@mui/material";
