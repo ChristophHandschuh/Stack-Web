@@ -89,10 +89,10 @@ const StackInspektor = () => {
     }
 
     return (
-        <Box>
+        <Box backgroundColor="#f4f5f9">
             <Grid container>
                 <Grid item xs={6}>
-                    <Box onClick={() => routeChange("learn")} sx={{ boxShadow: 4 }} height="3rem" borderRadius="0.6rem" mx="1.5rem" mt="1.5rem" py="0.01rem" px="2rem" display="flex" alignItems="center" justifyContent="center">
+                    <Box onClick={() => routeChange("learn")} sx={{ boxShadow: 2 }} backgroundColor="#fff" height="3rem" borderRadius="0.6rem" mx="1.5rem" mt="1.5rem" py="0.01rem" px="2rem" display="flex" alignItems="center" justifyContent="center">
                         <Box display="flex" alignItems="center">
                             <SchoolOutlinedIcon sx={{ color:"#909090"}}/>
                             <Typography variant="h5" fontWeight="625" color="#909090" ml="0.5rem">Practice</Typography>
@@ -100,14 +100,14 @@ const StackInspektor = () => {
                     </Box>
                 </Grid>
                 <Grid item xs={6}>
-                    <Box onClick={() => routeChange("create")} sx={{ boxShadow: 4 }} height="3rem" borderRadius="0.6rem" mx="1.5rem" mt="1.5rem" py="0.01rem" px="2rem" display="flex" alignItems="center" justifyContent="center">
+                    <Box onClick={() => routeChange("create")} sx={{ boxShadow: 2 }} backgroundColor="#fff" height="3rem" borderRadius="0.6rem" mx="1.5rem" mt="1.5rem" py="0.01rem" px="2rem" display="flex" alignItems="center" justifyContent="center">
                         <Box display="flex" alignItems="center">
                             <AddCircleOutlineIcon sx={{ color:"#909090"}}/>
                             <Typography variant="h5" fontWeight="625" color="#909090" ml="0.5rem">Create Flashcards</Typography>
                         </Box>
                     </Box>
                 </Grid>
-                <Box style={{height: 'calc(100vh - 12rem)'}} width="100%" m="1.5rem">
+                <Box style={{height: 'calc(100vh - 12rem)'}} width="100%" m="1.5rem" backgroundColor="#fff">
                     <DataGrid
                         rows={cleanText(cards)}
                         columns={columns}

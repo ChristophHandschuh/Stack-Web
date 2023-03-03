@@ -1,10 +1,18 @@
 import { Box, Typography } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useNavigate, useParams } from "react-router-dom";
 
 const StatusBar = () => {
+    const { id } = useParams();
+    let navigate = useNavigate(); 
+    const routeChange = () =>{ 
+        let path = `/library/${id}`;
+        navigate(path);
+    }
+
     return (
-        <Box width="100%" height="4rem" display="flex" alignItems="center" justifyContent="center" borderBottom="1px solid #d2d8e1">
-            <Box width="2rem" ml="2rem" display="flex" alignItems="center" justifyContent="center">
+        <Box width="100%" height="3rem" display="flex" alignItems="center" borderBottom="1px solid #d2d8e1">
+            <Box onClick={() => routeChange()} width="4rem" height="2rem" pl="2rem" display="flex" alignItems="center" justifyContent="center">
                 <ArrowBackIosIcon/>
             </Box>
             <Box
@@ -17,7 +25,7 @@ const StatusBar = () => {
                 }}
             >
             </Box>
-            <Box width="4rem" display="flex" alignItems="center" jusitfyContent="center">
+            <Box width="4rem" display="flex" alignItems="center">
                 <Typography variant="h6" fontWeight="bold">28/65</Typography>
             </Box>
         </Box>

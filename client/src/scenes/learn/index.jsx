@@ -4,8 +4,15 @@ import AspectRatio from '@mui/joy/AspectRatio';
 import Header from "../../components/Header";
 import FeedBackButton from "./FeedBackButton";
 import StatusBar from "./StatusBar";
+import { useParams } from "react-router-dom";
+import { useStoreState } from "easy-peasy";
 
 const Learn = () => {
+    const { id } = useParams();
+    const stacks = useStoreState((state) => state.stacks);
+    const cards = useStoreState((state) => state.cards);
+
+    console.log(id, stacks, cards);
     return (
         <Box>
             <StatusBar />

@@ -22,13 +22,14 @@ const Stack = ({ title, id, color, cardsLearned, cardsLearning, cardsNew }) => {
                 borderRadius="0.6rem"
                 marginX="1.5rem"
                 mb="2rem"
+                backgroundColor="#fff"
                 pb="0.75rem"
-                sx={{ boxShadow: 4 }}
+                sx={{ boxShadow: 2 }}
                 onClick={routeChange}
             >
                 <Box
                     backgroundColor={ color }
-                    height="1rem"
+                    height="0.75rem"
                     borderRadius="0.6rem 0.6rem 0rem 0rem"
                     >
                 </Box>
