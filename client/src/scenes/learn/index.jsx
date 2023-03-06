@@ -1,7 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import Flipcard from "../../components/Flipcard";
-import AspectRatio from '@mui/joy/AspectRatio';
-import Header from "../../components/Header";
+import Confetti from 'react-confetti'
 import FeedBackButton from "./FeedBackButton";
 import StatusBar from "./StatusBar";
 import { useParams } from "react-router-dom";
@@ -10,6 +8,8 @@ import { useEffect, useState } from "react";
 import TurnButton from "./TurnButton";
 import learnAlgo from "./learnAlgo";
 
+var card_now = {};
+
 const Learn = () => {
     const { id } = useParams();
     const stacks = useStoreState((state) => state.stacks);
@@ -17,9 +17,14 @@ const Learn = () => {
     const cards_content = useStoreState((state) => state.cards);
     const [isFlipped, setIsFlipped] = useState(false)
     const [cardText, setcardText] = useState("");
-    var card_now = {};
 
-    card_now = learnAlgo(null, cards, cards_content);
+    useEffect(() => {
+        card_now = learnAlgo(null, cards, cards_content);
+    }, []);
+
+    useEffect(() => {
+        console.log(card_now);
+    }, [card_now]);
 
     const feedback = (res) => {
         card_now = learnAlgo(res, cards, cards_content);
@@ -27,9 +32,8 @@ const Learn = () => {
     };
 
     useEffect(() => {
-        if(card_now!==null){
-            if(!isFlipped)
-            {
+        if(card_now !== null){
+            if(!isFlipped){
                 setcardText(card_now.front);
             }else{
                 setcardText(card_now.back);
@@ -51,7 +55,7 @@ const Learn = () => {
             </Box>
         );
     }else{
-        return(<Box><StatusBar /><Typography variant="h2">You made great progress!</Typography></Box>);
+        return(<Box><StatusBar/><Typography variant="h2">You made great progress!</Typography></Box>);
     }
 }
  
