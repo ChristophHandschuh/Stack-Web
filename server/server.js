@@ -207,7 +207,7 @@ app.post("/newcard", (req, res) => {
         if(reqb.type === "normal"){
             const card = new cardModel({ type: reqb.type, front: reqb.front, back: reqb.back });
             card.save().then(doc => {
-                stackModel.findByIdAndUpdate({ _id:reqb._id },{ $push: {cards: {card_id: card._id.toString(), status:"learning", ease_factor: 250, interval: 0}}, $inc:{ cardsNew: 1 }}, function (err, results) {
+                stackModel.findByIdAndUpdate({ _id:reqb._id },{ $push: {cards: {card_id: card._id.toString(), status:"new", ease_factor: 250, step_index: 0, time: Date.now(), interval: 0}}, $inc:{ cardsNew: 1 }}, function (err, results) {
                     if(err){
                         // res.send({status: false}, err);
                         res.send(err);

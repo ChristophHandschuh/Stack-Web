@@ -21,7 +21,7 @@ const StackBrowser = () => {
                 </Box>
             </Box>
             {stacks && stacks.map((stack, i) => (
-                <Stack key={i} title={stack.name} color={stack.color} cardsLearned={stack.cardsLearned} cardsLearning={stack.cardsLearning} cardsNew={stack.cardsNew} id={i + 1}/>
+                <Stack key={i} title={stack.name} color={stack.color} cards={stack.cards} id={i + 1}/>
             ))}
         </Box>
     );

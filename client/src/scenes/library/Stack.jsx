@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useStoreActions } from "easy-peasy";
 import ContentEditable from 'react-contenteditable';
 
-const Stack = ({ title, id, color, cardsLearned, cardsLearning, cardsNew }) => {
+const Stack = ({ title, id, color, cards }) => {
     const changeStackName = useStoreActions(actions => actions.changeStackName);
 
     let navigate = useNavigate(); 
@@ -12,10 +12,10 @@ const Stack = ({ title, id, color, cardsLearned, cardsLearning, cardsNew }) => {
       navigate(path);
     }
 
-    let sum = cardsNew + cardsLearned + cardsLearning;
-    if(cardsLearned !== 0 || cardsLearning !== 0 || cardsNew !== 0){
-        let greenPercent = 100 - parseInt(cardsLearned/sum * 100);
-        let redPercent = parseInt(cardsNew/sum * 100);
+    let sum = cards.length;
+    if(cards.length !== 0){
+        let greenPercent = 100 - parseInt(cards.filter(item => item.status === "new").length/sum * 100);
+        let redPercent = parseInt(cards.filter(item => item.status === "learned").length/sum * 100);
 
         return(
             <Box
@@ -52,7 +52,7 @@ const Stack = ({ title, id, color, cardsLearned, cardsLearning, cardsNew }) => {
                         height="0.65rem"
                         borderRadius="1rem"
                         sx={{
-                            background: `linear-gradient(to right, #F69393, #F69393 ${ redPercent }%, #EFF693 ${ redPercent }%, #EFF693 ${ greenPercent }%, #93F6AF ${ greenPercent }%, #93F6AF);`,
+                            background: `linear-gradient(to right, #93F6AF, #93F6AF ${ redPercent }%, #EFF693 ${ redPercent }%, #EFF693 ${ greenPercent }%, #F69393 ${ greenPercent }%, #F69393);`,
                         }}
                     >
                     </Box>
