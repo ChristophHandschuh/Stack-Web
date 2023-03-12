@@ -1,9 +1,3 @@
-function unixtimetoutc(unixtime){
-    var date = new Date(unixtime);
-    var utc = date.toUTCString();
-    return utc;
-}
-
 const learnAlgo = (res, cards, cards_content) => {
     var card_now = {};
     
@@ -19,13 +13,7 @@ const learnAlgo = (res, cards, cards_content) => {
         cards.sort((a, b) => a.time - b.time);
     };
 
-    console.log("Time now:", unixtimetoutc(Date.now()));
-    for(let i=0; i < cards.length; i++){
-        console.log(cards_content.filter(item => item._id === cards[i].card_id)[0].front, unixtimetoutc(cards[i].time));
-    }    
-
-    //check if card.date is more then 1 minute in the future
-    console.log(Date.now() + 60000 > cards[0].time);
+    //check if card.date is, or is more then 1 minute in the future
     if(Date.now() + 60000 >= cards[0].time){
         card_now = cards_content.filter(item => item._id === cards[0].card_id)[0];
         return card_now;

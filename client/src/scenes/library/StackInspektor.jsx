@@ -3,7 +3,7 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { useNavigate, useParams } from "react-router-dom";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import LinkIcon from '@mui/icons-material/Link';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useEffect } from "react";
 import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport, GridToolbarFilterButton } from '@mui/x-data-grid';
 
@@ -55,12 +55,12 @@ const columns: GridColDef[] = [
     },
     {
         field: 'edit',
-        headerName: "Edit",
+        headerName: "Delete",
         width: 50,
         renderCell: (params) => {
             return (
-                <Box width="100%" display="flex" alignItems="center" justifyContent="center" style={{ cursor: "pointer" }}>
-                    <LinkIcon index={params.row.id} style={{ fill: "#909090" }}/>
+                <Box width="100%" onClick={(event) => {event.delete=true;}} display="flex" alignItems="center" justifyContent="center" style={{ cursor: "pointer" }}>
+                    <DeleteOutlineOutlinedIcon index={params.row.id} style={{ fill: "#909090" }}/>
                 </Box>
             );
          }
@@ -72,6 +72,7 @@ const StackInspektor = () => {
     const stacks = useStoreState((state) => state.stacks);
     const cards = useStoreState((state) => state.cards);
     const getCards = useStoreActions(actions => actions.getCards);
+    const deleteCard = useStoreActions(actions => actions.deleteCard);
 
     useEffect(() => {
         getCards({ _id: stacks[id-1]._id});
@@ -114,7 +115,12 @@ const StackInspektor = () => {
                         disableSelectionOnClick
                         experimentalFeatures={{ newEditingApi: true }}
                         components={{ Toolbar: CustomToolbar }}
-                        onRowClick={(params) => cardEdit(params.id)}
+                        onRowClick={(params, event) => {
+                            if(!event.delete){
+                                cardEdit(params.id);
+                            }else{
+                                deleteCard({id: params.id, stack_id:id});
+                            }}}
                     />
                 </Box>
             </Grid>

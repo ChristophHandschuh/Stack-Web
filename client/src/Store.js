@@ -64,6 +64,15 @@ const store = createStore({
     }
     req();
   }),
+  deleteCard: action((state, payload) => {
+    state.cards.splice(payload.id, 1);
+    state.stacks[payload-1].flashcards.splice(payload.id, 1);
+    async function req(){
+      const response = await axios.post("http://localhost:3001/deletecard", {_id: state.cards[payload.id]._id, stack_id: payload.stack_id});
+      console.log(response.data);
+    }
+    req();
+  }),
   setStacks: action((state, payload) => {
     state.stacks = payload;
   }),

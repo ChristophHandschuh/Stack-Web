@@ -4,6 +4,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import "react-pro-sidebar/dist/css/styles.css";
+import { ReactComponent as Cube } from "../../assets/layers.svg";
 import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 import FilterNoneIcon from '@mui/icons-material/FilterNone';
@@ -33,7 +34,7 @@ const Sidebar = () => {
         return (
             <Box height="100vh" width="6rem" borderRight="0.06rem solid" borderRightColor="primary.main" display="flex" flexDirection="column" justifyContent="space-between" alignItems="center" pb="1rem" pt="1.5rem">
                 <Box>
-                    <FilterNoneIcon sx={{ color: "#827b7b" }} fontSize="large"/>
+                    <Cube sx={{ color: "#827b7b" }} width={35} height={35}/>
                 </Box>
                 <Box display="flex" flexDirection="column" mt="-6rem">
                     <Link to="/">

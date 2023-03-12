@@ -174,6 +174,23 @@ app.post("/editcard", (req, res) => {
     }
 });
 
+//route /deletecard is a post route, which deletes a card from the database
+app.post("/deletecard", (req, res) => {
+    console.log(req.body._id);
+    if(req.session.hasOwnProperty("user")){ //Not secure!! :()
+        cardModel.findByIdAndRemove({ _id:req.body._id }).exec((err, result) => {
+            if(err){
+                console.log(err);
+                res.send({status: false}, err);
+            }else{
+                stackModel.f
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
+});
+
 app.post("/stackname", (req, res) => {
     if(req.session.hasOwnProperty("user")){ //Not secure!! :()
         stackModel.findByIdAndUpdate({ _id:req.body._id },{name:req.body.name}, function (err, results) {
