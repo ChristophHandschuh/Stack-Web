@@ -183,7 +183,23 @@ app.post("/deletecard", (req, res) => {
                 console.log(err);
                 res.send({status: false}, err);
             }else{
-                stackModel.f
+                stackModel.findById({_id:req.body.stack_id}).exec((err, result) => {
+                    if(err){
+                        console.log(err);
+                        res.send({status: false}, err);
+                    }else{
+                        for(let i = 0; i < result.cards.length; i++){
+                            console.log(result.cards[i].card_id, req.body._id);
+                            if(result.cards[i].card_id == req.body._id){
+                                result.cards.splice(i, 1);
+                                result.markModified('cards');
+                                result.save();
+                                break;
+                            }
+                        }
+                        res.send({status: true});
+                    }
+                });
             }
         });
     }else{

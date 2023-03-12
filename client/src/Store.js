@@ -65,16 +65,17 @@ const store = createStore({
     req();
   }),
   deleteCard: action((state, payload) => {
-    state.cards.splice(payload.id, 1);
-    state.stacks[payload-1].flashcards.splice(payload.id, 1);
     async function req(){
-      const response = await axios.post("http://localhost:3001/deletecard", {_id: state.cards[payload.id]._id, stack_id: payload.stack_id});
+      const response = await axios.post("http://localhost:3001/deletecard", {_id: state.cards[payload.id]._id, stack_id: state.stacks[payload.stack_id - 1]._id});
       console.log(response.data);
     }
     req();
+    state.cards.splice(payload.id, 1);
+    state.stacks[payload.stack_id-1].cards.splice(payload.id, 1);
   }),
   setStacks: action((state, payload) => {
     state.stacks = payload;
+    console.log(payload);
   }),
   setCards: action((state, payload) => {
     state.cards = payload;
