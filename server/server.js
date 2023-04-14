@@ -8,13 +8,15 @@ const mongoose = require("mongoose");
 const userModel = require("./db/user");
 const stackModel = require("./db/stack");
 const cardModel = require("./db/card");
+const dotenv = require('dotenv');
 
+dotenv.config();
 const app = express();
 
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "http://172.245.156.33", "http://www.stack-study.me", "http://stack-study.me", "http://www.stack-study.me/library/1"],
     methods: ["GET", "POST",],
     credentials: true
 }));
@@ -31,10 +33,11 @@ app.use(session({
     }
 }))
 
-mongoose.connect("mongodb://localhost:27017/stack", {
+mongoose.connect(process.env.database, {
    useNewUrlParser: true,
    useUnifiedTopology: true
 });
+console.log(process.env.database);
 
 const saltRoundes = 10
 
@@ -76,6 +79,7 @@ app.post("/login", (req, res) => {
                 bcrypt.compare(password, result[0].password, (err, response) => {
                     if (response) {
                         req.session.user = result;
+                        console.log(req.session);
 
                         res.send({ loggedIn: true });
                     } else {
@@ -88,6 +92,8 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/stacks", (req, res) => {
+    console.log(req.session);
+    console.log(req.session.hasOwnProperty("user"));
     if(req.session.hasOwnProperty("user")){
         const id = req.session.user[0]._id;
         stackModel.find({ userID:id }).sort({"createdAt": -1}).exec((err, results) => {
@@ -240,7 +246,7 @@ app.post("/newcard", (req, res) => {
         if(reqb.type === "normal"){
             const card = new cardModel({ type: reqb.type, front: reqb.front, back: reqb.back });
             card.save().then(doc => {
-                stackModel.findByIdAndUpdate({ _id:reqb._id },{ $push: {cards: {card_id: card._id.toString(), status:"new", ease_factor: 250, step_index: 0, time: Date.now(), interval: 0}}, $inc:{ cardsNew: 1 }}, function (err, results) {
+                stackModel.findByIdAndUpdate({ _id:reqb._id },{ $push: {cards: {card_id: card._id.toString(), status:"new", ease_factor: 250, step_index: 0, time: Date.now(), interval: 0}}}, function (err, results) {
                     if(err){
                         // res.send({status: false}, err);
                         res.send(err);
@@ -256,6 +262,59 @@ app.post("/newcard", (req, res) => {
     }
 });
 
+app.post("/deletestack", (req, res) => {
+    if(req.session.hasOwnProperty("user")){ //Not secure!! :()
+        stackModel.findByIdAndDelete({_id:req.body._id}).exec((err, result) => {
+            if(err){
+                console.log(err);
+                res.send({status: false}, err);
+            }else{
+                for(var i=0;i<result["cards"].length;i++){
+                    cardModel.findById({_id:result["cards"][i]["card_id"]}).exec((err, result) => {
+                        if(err){
+                            console.log(err);
+                            res.send({status: false}, err);
+                        }else{
+                            if(result["usage"] == 1)
+                                result.remove();
+                        }
+                    });
+                }
+                res.send({status: true});
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
+});
+
+//route for sharing a stack
+app.get("/share", (req, res) => {
+    if(req.session.hasOwnProperty("user") && req.query.hasOwnProperty("id")){ //Not secure!! :()
+        const id = req.query.id;
+        stackModel.findById({_id:id}).exec((err, result) => {
+            if(err){
+                console.log(err);
+                res.send({status: false}, err);
+            }else{
+                cards = result["cards"];
+                //reset cards
+                for(var i=0;i<result["cards"].length;i++){
+                    cards[i]["status"] = "new";
+                    cards[i]["ease_factor"] = 250;
+                    cards[i]["step_index"] = 0;
+                    cards[i]["time"] = Date.now();
+                    cards[i]["interval"] = 0;
+                }
+                const stack = new stackModel({ name: result["name"], userID: req.session.user[0]._id, cards: cards });
+                stack.save();
+                res.send(result["name"] + " added!");
+            }
+        });
+    }else{
+        res.send("Please login first!");
+    }
+});
 
 // app.post("/flashcardcontent", (req, res) => {
 //     if(req.session.hasOwnProperty("user")){ //Not secure!! :()

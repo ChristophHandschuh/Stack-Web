@@ -21,18 +21,6 @@ const stackSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    cardsNew: {
-        type: Number,
-        default: 0,
-    },
-    cardsLearning: {
-        type: Number,
-        default: 0,
-    },
-    cardsLearned: {
-        type: Number,
-        default: 0,
-    },
 },{
     versionKey: false
 });

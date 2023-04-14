@@ -68,6 +68,7 @@ const Stack = ({ title, id, color, cards }) => {
                 pb="0.75rem"
                 sx={{ boxShadow: 4 }}
                 onClick={routeChange}
+                backgroundColor="#fff"
             >
                 <Box
                     backgroundColor={ color }

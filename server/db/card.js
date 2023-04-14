@@ -14,6 +14,10 @@ const cardSchema = new mongoose.Schema({
     answers:{
         type: Object,
     },
+    usage: {
+        type: Number,
+        default: 1,
+    }
 },{
     versionKey: false
 });
