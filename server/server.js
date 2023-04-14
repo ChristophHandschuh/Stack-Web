@@ -248,8 +248,8 @@ app.post("/newcard", (req, res) => {
             card.save().then(doc => {
                 stackModel.findByIdAndUpdate({ _id:reqb._id },{ $push: {cards: {card_id: card._id.toString(), status:"new", ease_factor: 250, step_index: 0, time: Date.now(), interval: 0}}}, function (err, results) {
                     if(err){
-                        res.send({status: false}, err);
-                        // res.send(err);
+                        // res.send({status: false}, err);
+                        res.send(err);
                     }else{
                         res.send("success");
                         // res.send({status: true});
