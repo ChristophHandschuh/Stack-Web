@@ -9,7 +9,7 @@ const store = createStore({
   getStacks: thunk(async (actions, payload) => {
     actions.setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3001/stacks");
+      const response = await axios.get("https://stack-study.me:3001/stacks");
       actions.setStacks(response.data.results);
     } catch (e) {
       actions.setError(e);
@@ -19,7 +19,7 @@ const store = createStore({
   getCards: thunk(async (actions, payload) => {
     actions.setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3001/cards", {params: {_id: payload._id}});
+      const response = await axios.get("https://stack-study.me:3001/cards", { params: { _id: payload._id } });
       actions.setCards(response.data);
       console.log(response.data);
     } catch (e) {
@@ -28,28 +28,28 @@ const store = createStore({
     actions.setLoading(false);
   }),
   changeStackName: action((state, payload) => {
-    let stack = state.stacks[payload.id-1];
+    let stack = state.stacks[payload.id - 1];
     stack.name = payload.name;
-    axios.post("http://localhost:3001/stackname", {_id: stack._id, name:stack.name});
+    axios.post("https://stack-study.me:3001/stackname", { _id: stack._id, name: stack.name });
   }),
   changeCardContent: action((state, payload) => {
-    let card = state.stacks[payload.stack_id-1].flashcards[payload.card_id];
-    if(payload.front){
+    let card = state.stacks[payload.stack_id - 1].flashcards[payload.card_id];
+    if (payload.front) {
       card.front = payload.front;
-    }else{
+    } else {
       card.back = payload.back;
     }
-    axios.post("http://localhost:3001/flashcardcontent", {_id: state.stacks[payload.stack_id-1]._id, flashcard_id:payload.card_id ,flashcard:card});
+    axios.post("https://stack-study.me:3001/flashcardcontent", { _id: state.stacks[payload.stack_id - 1]._id, flashcard_id: payload.card_id, flashcard: card });
   }),
   newStack: thunk(async (actions, payload) => {
-    const response = await axios.get("http://localhost:3001/newstack");
+    const response = await axios.get("https://stack-study.me:3001/newstack");
     const stack = response.data;
     actions.addStack(stack);
   }),
   newCard: action((state, payload) => {
     console.log(payload.CardData);
-    async function req(){
-      const response = await axios.post("http://localhost:3001/newcard", {_id: state.stacks[payload.id-1]._id, type: payload.CardData.type, front: payload.CardData.front, back: payload.CardData.back});
+    async function req() {
+      const response = await axios.post("https://stack-study.me:3001/newcard", { _id: state.stacks[payload.id - 1]._id, type: payload.CardData.type, front: payload.CardData.front, back: payload.CardData.back });
       const card = response.data;
       console.log(card);
     }
@@ -57,21 +57,21 @@ const store = createStore({
   }),
   editCard: action((state, payload) => {
     console.log(payload.CardData);
-    async function req(){
-      const response = await axios.post("http://localhost:3001/editcard", {payload: payload.CardData});
+    async function req() {
+      const response = await axios.post("https://stack-study.me:3001/editcard", { payload: payload.CardData });
       const card = response.data;
       console.log(card);
     }
     req();
   }),
   deleteCard: action((state, payload) => {
-    async function req(){
-      const response = await axios.post("http://localhost:3001/deletecard", {_id: state.cards[payload.id]._id, stack_id: state.stacks[payload.stack_id - 1]._id});
+    async function req() {
+      const response = await axios.post("https://stack-study.me:3001/deletecard", { _id: state.cards[payload.id]._id, stack_id: state.stacks[payload.stack_id - 1]._id });
       console.log(response.data);
     }
     req();
     state.cards.splice(payload.id, 1);
-    state.stacks[payload.stack_id-1].cards.splice(payload.id, 1);
+    state.stacks[payload.stack_id - 1].cards.splice(payload.id, 1);
   }),
   setStacks: action((state, payload) => {
     state.stacks = payload;

@@ -17,21 +17,21 @@ axios.defaults.withCredentials = true;
 
 const theme = createTheme();
 
-const SignIn = ({ setIsLoggedIn })  => {
+const SignIn = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [noUser, setNoUser] = useState(false);
-  
+
   const login = () => {
-    axios.post('http://localhost:3001/login', {username: username, password: password})
-          .then((response) => {
-            console.log(response);
-            if(response.data.loggedIn === true){
-                setIsLoggedIn(true);
-            } else {
-                setIsLoggedIn(false);
-                setNoUser(true);
-            }
+    axios.post('https://stack-study.me:3001/login', { username: username, password: password })
+      .then((response) => {
+        console.log(response);
+        if (response.data.loggedIn === true) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+          setNoUser(true);
+        }
       });
   };
 
@@ -59,7 +59,7 @@ const SignIn = ({ setIsLoggedIn })  => {
               fullWidth
               label="Username"
               autoFocus
-              onChange={(e) => {setUsername(e.target.value)}}
+              onChange={(e) => { setUsername(e.target.value) }}
             />
             <TextField
               margin="normal"
@@ -67,7 +67,7 @@ const SignIn = ({ setIsLoggedIn })  => {
               label="Password"
               type="password"
               autoFocus
-              onChange={(e) => {setPassword(e.target.value)}}
+              onChange={(e) => { setPassword(e.target.value) }}
             />
             {noUser && <Typography variant="h8">No user with this password exists</Typography>}
             <Button
@@ -75,7 +75,7 @@ const SignIn = ({ setIsLoggedIn })  => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={ login }
+              onClick={login}
             >
               Sign In
             </Button>

@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     async function checkLoginStatus() {
-      const response = await axios.get("http://localhost:3001/login");
+      const response = await axios.get("https://stack-study.me:3001/login");
       console.log(response);
       setIsLoggedIn(response.data.loggedIn);
     }
@@ -28,23 +28,23 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <StoreProvider store={store}>
-      <div className="app">
-        <Router>
-        {isLoggedIn && <Sidebar />}
-          <main className="content">
+      <CssBaseline />
+      <StoreProvider store={store}>
+        <div className="app">
+          <Router>
+            {isLoggedIn && <Sidebar />}
+            <main className="content">
               <Routes>
-                  <Route exact path="/" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Home/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
-                  <Route path="/library" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
-                  <Route path="/library/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
-                  <Route path="/create/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
-                  <Route path="/create/:id/:card_id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
-                  <Route path="/learn/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Learn/>) : (<SignIn setIsLoggedIn={setIsLoggedIn }/>)} />
+                <Route exact path="/" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Home />) : (<SignIn setIsLoggedIn={setIsLoggedIn} />)} />
+                <Route path="/library" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library />) : (<SignIn setIsLoggedIn={setIsLoggedIn} />)} />
+                <Route path="/library/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Library />) : (<SignIn setIsLoggedIn={setIsLoggedIn} />)} />
+                <Route path="/create/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create />) : (<SignIn setIsLoggedIn={setIsLoggedIn} />)} />
+                <Route path="/create/:id/:card_id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Create />) : (<SignIn setIsLoggedIn={setIsLoggedIn} />)} />
+                <Route path="/learn/:id" element={isLoggedIn === null ? (<Box />) : isLoggedIn ? (<Learn />) : (<SignIn setIsLoggedIn={setIsLoggedIn} />)} />
               </Routes>
-          </main>
-        </Router>
-      </div>
+            </main>
+          </Router>
+        </div>
       </StoreProvider>
     </ThemeProvider>
   );
